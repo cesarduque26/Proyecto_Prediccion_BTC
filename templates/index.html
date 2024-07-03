@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predicción de Precio de BTC</title>
+    
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 20px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#result {
+    margin-top: 20px;
+}
+    </style>
+</head>
+<body>
+    <h1>Predicción de Precio de BTC</h1>
+    <form id="prediction-form">
+        <label for="Volumen">Volumen:</label>
+        <input type="number" id="Volumen" name="Volumen" required><br>
+
+        <label for="Hour">Hora:</label>
+        <input type="number" id="Hour" name="Hour" required><br>
+
+        <label type for="Fecha">Fecha:</label>
+        <input type="date" id="Fecha" name="Fecha" required>
+
+        <button type="button" onclick="predictBTC()">Predecir Precio</button>
+    </form>
+
+    <h2>Resultado de la Predicción:</h2>
+    <p id="result"></p>
+
+    <script>
+        function predictBTC() {
+            var Volumen = document.getElementById("Volumen").value;
+            var Hour = document.getElementById("Hour").value;
+            var Fecha = document.getElementById("Fecha").value; 
+            var Year = Fecha.split("-")[0];
+            var Month = Fecha.split("-")[1];
+            var Day = Fecha.split("-")[2];
+
+            var data = {
+                "Volumen": Volumen,
+                "Hour": Hour,
+                "Day": Day,
+                "Month": Month,
+                "Year": Year
+            };
+
+            // Realizar la solicitud POST a la API Flask
+             fetch('/api/modelo', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify(data)
+             })
+             .then(response => response.json())
+             .then(data => {
+                 document.getElementById("result").innerText = data.impresion;
+             });
+        }
+    </script>
+</body>
+</html>
